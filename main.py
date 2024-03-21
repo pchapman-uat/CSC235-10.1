@@ -1,19 +1,31 @@
+# tkinter is a library that allows for a very simple display
 import tkinter as tk
 
+# message box, and file dialog must be imported seperatly for use
 from tkinter import messagebox, filedialog
 
+# This function will clear the note, after warning the user
 def clearNote():
+    # Create an OK/Cancel message box, with the icon of warning, returns a true/false value
     responce = messagebox.askokcancel(title="WARNING", message="Are you sure you want to clear note?", icon='warning')
+    # If the user selects ok...
     if responce:
+        # Delete text for the first character, to the end of the text
         text.delete("1.0","end")
-
+# This function will save the note as a new file
 def saveAsNote():
+    # Get all text for character 1, to the end of the text
     note = text.get("1.0", "end")
+    # Create a windows save as dialog, with the default file extension of txt, limiting to only text files
     path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text  Filews", "*.txt")])
+    # Set the current path lable's text as the path
     currentPath.config(text=path)
+    # Run the save function with the path and the note
     save(path, note)
 
+# This funciton will open a file
 def importNote():
+    # This will ask the user to open a file with the default file extension limited to the types of txt
     path = filedialog.askopenfilename(defaultextension=".txt", filetypes=[("Text Files", ".txt")])
 
     if path:
@@ -64,8 +76,5 @@ submitButton.pack(side="right")
 
 saveButton = tk.Button(root, text="Save", command=saveNote)
 saveButton.pack(side="right")
-
-
-
 
 root.mainloop()

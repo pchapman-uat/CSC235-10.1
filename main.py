@@ -3,11 +3,14 @@ import tkinter as tk
 from tkinter import messagebox, filedialog
 
 def clearNote():
-    text.delete("1.0","end")
+    responce = messagebox.askokcancel(title="WARNING", message="Are you sure you want to clear note?", icon='warning')
+    if responce:
+        text.delete("1.0","end")
 
 def saveAsNote():
     note = text.get("1.0", "end")
     path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text  Filews", "*.txt")])
+    currentPath.config(text=path)
     save(path, note)
 
 def importNote():
@@ -23,14 +26,21 @@ def importNote():
 
 def saveNote():
     path = currentPath.cget("text")
-    note = text.get("1.0", "end")
-    save(path, note)
+    if path:
+        responce = messagebox.askokcancel("Save", "Saving will ovewrite the current file")
+        if responce:
+            note = text.get("1.0", "end")
+            save(path, note)
+    else:
+        messagebox.showwarning("404", "Error 404: File not found; Creating new file")
+        saveAsNote()
 
 
 def save(path, note):
     if path:
         with open(path, "w") as file:
             file.write(note)
+        messagebox.showinfo("Sucsess", "File was saved")
 root = tk.Tk()
 root.title("3/19/24 | PC")
 
@@ -38,18 +48,24 @@ text = tk.Text(root, wrap=tk.WORD)
 
 text.pack(fill="both", expand=True)
 
-clearbutton = tk.Button(root, text="clear note", command=clearNote)
+clearbutton = tk.Button(root, text="Clear", command=clearNote)
 clearbutton.pack(side=tk.LEFT)
 
+
+openButton = tk.Button(root, text="Open", command=importNote)
+openButton.pack(side="left")
+
 currentPath = tk.Label(root)
-currentPath.config(text="N/A")
+currentPath.config(text="")
 currentPath.pack(side="left")
+
 submitButton = tk.Button(root, text="Save as", command=saveAsNote)
 submitButton.pack(side="right")
 
-openButton = tk.Button(root, text="Open File", command=importNote)
-openButton.pack(side="right")
-
 saveButton = tk.Button(root, text="Save", command=saveNote)
 saveButton.pack(side="right")
+
+
+
+
 root.mainloop()

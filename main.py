@@ -12,12 +12,15 @@ defaultSavePath = os.path.dirname(os.path.abspath(__file__)) + "\\notes"
 
 # This function will clear the note, after warning the user
 def clearNote():
-    # Create an OK/Cancel message box, with the icon of warning, returns a true/false value
-    responce = messagebox.askokcancel(title="WARNING", message="Are you sure you want to clear note?", icon='warning')
-    # If the user selects ok...
-    if responce:
-        # Delete text for the first character, to the end of the text
-        text.delete("1.0","end")
+    note = text.get("1.0", "end")
+    length = len(note)
+    if(length > 1):
+        response = messagebox.askyesnocancel("Warning", "This action will remove unsaved work, do you want to save?")
+        if(response):
+            saveNote()
+        elif (not (response == None)):
+            # Delete text for the first character, to the end of the text
+            text.delete("1.0","end")
 # This function will save the note as a new file
 def saveAsNote():
     # Get all text for character 1, to the end of the text
@@ -32,7 +35,9 @@ def saveAsNote():
 # This funciton will open a file
 def importNote():
 
-    # TODO: Ask the user to confirm opening if there is text already
+    # Clear the current viewed note
+    # Clearing will ask the user if they want to save
+    clearNote()
     # This will ask the user to open a file with the default file extension limited to the types of txt
     path = filedialog.askopenfilename(defaultextension=".txt", filetypes=[("Text Files", ".txt")], initialdir=defaultSavePath)
 
@@ -42,8 +47,6 @@ def importNote():
         with open(path, "r") as file:
             # Read the file and save it to the note
             note = file.read()
-            # Clear the current viewed note
-            clearNote()
             # Insert the note at line 1, character 0
             text.insert("1.0", note) 
             # Update the current path lable's text with the new path

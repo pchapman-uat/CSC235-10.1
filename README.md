@@ -4,9 +4,12 @@ Create a GUI in Python
 # Features
 - Write notes
 - Open notes
+    - When doing a save it will update the opened file
 - Save note to opened file
+    - If there is no opened file, save as new
 - Save note as new file
 - Clear note
+    -   Asks to save if text is found
 
 ## Images
 ![](./_screenshots/mainScreen.png)
